@@ -1,0 +1,167 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+    {#    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>#}
+    <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $('#newNav').click(function () {
+                window.location.href = "{% url 'Resource:add' %}";
+            });
+        });
+
+
+        function checkall() {
+            var alls = document.getElementsByName("check");
+            var ch = document.getElementById("checkall");
+            if (ch.checked) {
+                for (var i = 0; i < alls.length; i++) {
+                    alls[i].checked = true;
+                }
+            } else {
+                for (var i = 0; i < alls.length; i++) {
+                    alls[i].checked = false;
+                }
+            }
+        }
+
+        function delAll() {
+            var alls = document.getElementsByName("check");
+            var ids = new Array();
+            for (var i = 0; i < alls.length; i++) {
+                if (alls[i].checked) {
+                    ids.push(alls[i].value);
+                }
+            }
+            if (ids.length > 0) {
+                $.ajax({
+                    url: '{% url 'Resource:dropall' %}',
+                    type: 'POST',
+                    data: {
+                        ss: ids + ''
+                    },
+                    cache: false,
+                    success:function () {
+                        alert('删除成功！')
+                    }
+                });
+            } else {
+                alert("请选中要删除的项");
+            }
+        }
+    </script>
+</head>
+<body>
+<form class="form-inline definewidth m20" action="{% url 'Resource:index' %}" method="post">
+    {% csrf_token %}
+    资源(菜单)名称：
+    <input type="text" name="r_name" id="username" class="abc input-default" placeholder="" value="" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')">&nbsp;&nbsp;
+    <button type="submit" class="btn btn-primary">查询</button>
+</form>
+{#第一部分为表中所有的信息#}
+<table class="table table-bordered table-hover definewidth m10">
+    <thead>
+    <tr>
+        <th width="5%"><input type="checkbox" id="checkall" onChange="checkall();"></th>
+        <th>资源名称</th>
+        <th>路径Url</th>
+        <th>是否有效</th>
+        <th width="10%">操作</th>
+    </tr>
+    </thead>
+    {% if all %}
+
+        {% for i in all %}
+            <tr>
+                <td style="vertical-align:middle;"><input type="checkbox" name="check" value="{{ i.id }}"></td>
+                <td>{{ i.r_name }}</td> {#资源名称#}
+                <td>{{ i.url }}</td>    {#url路径#}
+                <td>{{ i.result }}</td> {#是否有效#}
+                <td>
+                    <a href="{% url 'Resource:edit' u_id=i.id %}">编辑</a>&nbsp;&nbsp;&nbsp;<a
+                        href="{% url 'Resource:drop'  u_id=i.id %}">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+
+    {% else %}
+    {% endif %}
+{#第二部分为表中符合条件的信息#}
+{#<table class="table table-bordered table-hover definewidth m10">#}
+    {% if u %}
+        {% for i in u %}
+            <tr>
+                <td style="vertical-align:middle;"><input type="checkbox" name="check" value="{{ i.id }}"></td>
+                <td>{{ i.r_name }}</td> {#资源名称#}
+                <td>{{ i.url }}</td>    {#url路径#}
+                <td>{{ i.result }}</td> {#是否有效#}
+                <td>
+                    <a href="{% url 'Resource:edit' u_id=i.id %}">编辑</a>&nbsp;&nbsp;&nbsp;<a
+                        href="{% url 'Resource:drop'  u_id=i.id %}">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+    {% endif %}
+{#        </table>#}
+        <table class="table table-bordered table-hover definewidth m10">
+            <tr>
+                <th colspan="5">
+                    <div class="inline pull-right page">
+                        <a href='?page=1'>首页</a>
+                        {% if u.has_next %}
+                            <a href='?page={{ u.next_page_number }}'>下一页</a>
+                        {% endif %}
+                        {% for num in u.paginator.page_range %}
+                            <a href="?page={{ num }}">{{ num }}</a>
+                        {% endfor %}
+                        {% if u.has_previous %}
+                            <a href="?page={{ u.previous_page_number }}">上一页</a>
+                        {% endif %}
+
+{#                        <a href='?page={{ u.paginator.num_pages }}'>最后一页</a>#}
+{#                        当前在第{{ all.number }}页 共有{{ all.paginator.num_pages }}页#}
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-success" id="newNav">添加资源</button>&nbsp;&nbsp;&nbsp;<button
+                            type="button" class="btn btn-success" id="delPro" onClick="delAll();">删除选中
+                    </button>
+                    </div>
+                </th>
+            </tr>
+        </table>
+
+</body>
+</html>

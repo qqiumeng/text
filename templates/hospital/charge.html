@@ -1,0 +1,147 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>收费项目登记</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+{#    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+{#    <script type="text/javascript" src="{% static 'js/ckeditor/ckeditor.js' %}"></script>#}
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+	 $(function () {
+		$('#newNav').click(function(){
+				window.location.href="{% url 'hospital:charge_edit2' %}";
+		 });
+    });
+	
+    	function checkall(){
+			var alls=document.getElementsByName("check");
+			var ch=document.getElementById("checkall");
+			if(ch.checked){
+				for(var i=0;i<alls.length;i++){
+					alls[i].checked=true;	
+				}	
+			}else{
+				for(var i=0;i<alls.length;i++){
+					alls[i].checked=false;	
+				}	
+			}
+		}
+		function delAll(){
+			var alls=document.getElementsByName("check");
+			var ids=new Array();
+			for(var i=0;i<alls.length;i++){
+				if(alls[i].checked){
+					ids.push(alls[i].value);
+				}		
+			}
+			if(ids.length>0){
+				if(confirm("确认操作?")){
+					alert("成功!");
+				}
+			}else{
+				alert("请选中要操作的项");
+			}
+		}
+    $(function () {       
+		$('#backid').click(function(){
+				window.location.href="{% url 'hospital:dispensing' %}";
+		 });
+    });
+    </script>
+</head>
+<body>
+   
+<form action="" method="post" class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">收费项目名称：</td>
+        <td width="10%"><input type="text" name="pname"></td>
+		
+        <td>
+		<button type="submit" class="btn btn-primary" type="button">查询</button> 
+			<button type="submit" class="btn btn-primary" type="button">清空</button> </td>
+    </tr>
+   
+</table>
+
+
+</form>
+<table class="table table-bordered table-hover definewidth m10" >
+   <thead>
+    <tr>
+        <th>编号</th>
+        <th>收费项目名称</th>        
+        <th>收费金额</th>
+        <th>创建日期</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+	     {% for dr in char %}
+         <tr>
+            <td style="vertical-align:middle;">{{ dr.id }}</td>
+            <td style="vertical-align:middle;">{{ dr.charge_cellectable }}</td>
+            <td style="vertical-align:middle;">{{ dr.charge_amount }}</td>
+            <td style="vertical-align:middle;">{{ dr.exam_date|date:"Y-m-d H:i:s" }}</td>
+            <td style="vertical-align:middle;">
+                <a href="{% url 'hospital:charge_edit1' c_id=dr.id %}">修改</a>
+                <a href="{% url 'hospital:delete' c_id=dr.id %}">删除</a>
+            </td>
+         </tr>
+	     {% endfor %}
+
+  </table>
+  
+  <table class="table table-bordered table-hover definewidth m10" >
+  	<tr>
+        <th colspan="5">
+            <div class="inline pull-right page">
+                <a href="?page=1">首页</a>
+                {% if char.has_previous %}
+                    <a href="?page={{ char.previous_page_number }}">上一页</a>
+                {% endif %}
+                {% for num in char.paginator.page_range %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% endfor %}
+            {% if char.has_next %}
+                <a href="?page={{ char.next_page_number }}">下一页</a>
+            {% endif %}
+                <a href="?page={{ char.paginator.num_pages }}">尾页</a>
+		    </div>
+
+
+		 <div><button type="button" class="btn btn-success" id="newNav">添加收费项目</button>
+		 
+		 </div>
+		 
+		 </th></tr>
+  </table>
+  
+</body>
+</html>

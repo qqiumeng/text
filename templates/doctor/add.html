@@ -1,0 +1,144 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>添加医生--中软高科-2015</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+    {#    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>#}
+    <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
+
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $('#backid').click(function () {
+                window.location.href = "{% url 'doctor:index' %}";
+            });
+        });
+
+        {#function check_verify(object_value){#}
+        {#    $.ajax({#}
+        {#        url: "{% url 'doctor:check_verify' %}",#}
+        {#        type: 'POST',#}
+        {#        data: {#}
+        {#            object_value: object_value#}
+        {#        },#}
+        {#        cache: false,#}
+        {#        success: function(data){#}
+        {#            if(data['status'] == 'SUCCESS'){#}
+        {#                alert($(obj).val())#}
+        {#            }else{#}
+        {#                var m_1 = document.getElementById('m_1');#}
+        {#                m_1.prepend(data['message'])#}
+        {#            }#}
+        {#        }#}
+        {#    })#}
+        {#}#}
+    </script>
+</head>
+<body>
+<form action="{% url 'doctor:add' %}" method="post" class="definewidth m20">
+
+    <table class="table table-bordered table-hover definewidth m10">
+        <tr>
+            <td width="10%" class="tableleft"><font color="red">*</font>姓名</td>
+            <td><input type="text" name="doctor_name" onblur="check_verify(this.value)" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" required pattern=".*?"></td><br>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft"><font color="red">*</font>医生编号</td>
+            <td><input type="text" name="d_number" onblur="check_verify(this.value)" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" required pattern=".*?"></td>
+            <span></span>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft"><font color="red">*</font>证件类型</td>
+            <td><input type="text" name="card_type" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" required pattern=".*?"></td>
+            <td class="error_msg3"></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft"><font color="red">*</font>身份证号</td>
+            <td><input type="text" name="card_num" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" required pattern=".*?" ></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft"><font color="red">*</font>手机</td>
+            <td><input type="text" name="phone" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" required pattern=".*?"></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">座机</td>
+            <td><input type="text" name="tel" onblur="check_verify(this.value)" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" required pattern=".*?"></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft"><font color="red">*</font>性别</td>
+            <td><input type="radio" name="sex" value="男" checked/>男&nbsp;&nbsp;&nbsp;<input type="radio" name="sex" value="女"/>女
+            </td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft"><font color="red">*</font>年龄</td>
+            <td><input type="text" name="age" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" required pattern=".*?"/></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">电子邮箱</td>
+            <td><input type="text" name="email" onblur="check_verify(this.value)" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" required pattern=".*?"></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft"><font color="red">*</font>所属科室</td>
+            <td><select name="office" onblur="check_verify(this.value)" >
+                {% for d in d_all %}
+                    <option value="{{ d.department_name }}">{{ d.department_name }}</option>
+                {% endfor %}
+            </select></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">学历</td>
+            <td>
+                <select name="level" onblur="check_verify(this.value)">
+                    <option  value="专科">专科</option>
+                    <option  value="本科">本科</option>
+                    <option  value="博士">博士</option>
+                    <option  value="博士后">博士后</option>
+                </select>
+        </td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">备注</td>
+            <td><textarea name="remark" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" required pattern=".*?"></textarea></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <center>
+                    <button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button
+                        type="button" class="btn btn-success" name="backid" id="backid">返回列表
+                </button>
+                </center>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

@@ -1,0 +1,114 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>查看--中软高科-2015</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+{#    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>#}
+    <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+    $(function () {       
+		$('#backid').click(function(){
+				window.location.href="{% url 'doctor:index' %}";
+		 });
+    });
+    </script>
+</head>
+<body>
+<form action="{%  url 'doctor:look' e_id=e.id %}" method="post" class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">姓名</td>
+        <td>{{ e.doctor_name }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">证件类型</td>
+        <td>{{ e.card_type }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">证件号</td>
+        <td>{{ e.card_num }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">手机</td>
+        <td>{{ e.phone }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">座机</td>
+        <td>{{ e.tel }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">性别</td>
+        <td>{{ e.sex }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">年龄</td>
+        <td>{{ e.age }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">出生年月</td>
+        <td>{{ e.birth }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">电子邮箱</td>
+        <td>{{ e.email }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">所属科室</td>
+        <td>{{ e.d_office.department_name }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">学历</td>
+        <td>{{ e.level }}</td>
+    </tr>
+	<tr>
+        <td width="10%" class="tableleft">备注</td>
+        <td>{{ e.remark }}</td>
+	</tr>
+    <tr>
+        <td width="10%" class="tableleft">入院日期</td>
+        <td>{{ e.in_data }}</td>
+	</tr>
+    <tr>
+        <td width="10%" class="tableleft">医生编号</td>
+        <td>{{ e.d_number }}</td>
+	</tr>
+    <tr>
+        <td colspan="2">
+			<center>
+				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+			</center>
+		</td>
+    </tr>
+</table>
+</form>
+</body>
+</html>
